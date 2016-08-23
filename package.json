@@ -1,0 +1,23 @@
+{
+  "name": "updater-service",
+  "version": "1.0.0",
+  "description": "updater service for samalinne",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hugosama1/updater-service.git"
+  },
+  "author": "Hugo Gomez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hugosama1/updater-service/issues"
+  },
+  "homepage": "https://github.com/hugosama1/updater-service#readme",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}
