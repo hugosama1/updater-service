@@ -27,6 +27,7 @@ app.post('/messages', function (req, res) {
 			date :  date,
 			message : message
 		});
+		fs.writeFileSync('messages.json', JSON.stringify(messages));
 	}
 	res.json({ insertado : true });
 });
