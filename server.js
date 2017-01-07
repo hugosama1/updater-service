@@ -16,11 +16,14 @@ app.get('/samalinne.apk', function (req, res) {
 });
 
 app.post('/messages', function (req, res) {
+	var dayInMillis = (1000*60*60*24);
 	var messages = getMessages();
 	var message = req.body.message;
 	if(message) {
 		var lastMessage = messages[messages.length-1];
-		var date = lastMessage.date + (1000 * 60 * 60 * 24);
+		var days = Math.round((+new Date-lastMessage.date)/dayInMillis);
+		var dayDifference = days == 0 ? dayInMillis : (dayInMillis* days);
+		var date = lastMessage.date + dayDifference;
 		var _id = lastMessage._id + 1;
 		messages.push({
 			_id: _id,
@@ -31,6 +34,7 @@ app.post('/messages', function (req, res) {
 	}
 	res.json({ insertado : true });
 });
+
 
 app.get('/messages', function (req, res) {
 	var messages = getMessages();
