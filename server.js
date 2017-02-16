@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser')
+var request = require('request');
 const path = require('path');
 const PORT = 8080;
 var fs = require('fs');
@@ -22,7 +23,7 @@ app.post('/messages', function (req, res) {
 	if(message) {
 		var lastMessage = messages[messages.length-1];
 		var days = Math.round((+new Date-lastMessage.date)/dayInMillis);
-		var dayDifference = days == 0 ? dayInMillis : (dayInMillis* days);
+		var dayDifference = days <= 0 ? dayInMillis : (dayInMillis* days);
 		var date = lastMessage.date + dayDifference;
 		var _id = lastMessage._id + 1;
 		messages.push({
@@ -31,10 +32,45 @@ app.post('/messages', function (req, res) {
 			message : message
 		});
 		fs.writeFileSync('messages.json', JSON.stringify(messages));
+		//message arrive in : 
+		days = days <= 0 ? Math.abs(days) : days;
+		sendNotification(days);
 	}
 	res.json({ insertado : true });
 });
 
+function sendNotification (days) {
+	// Set the headers
+	var headers = {
+		'Authorization' : 'key=AAAAFIXhKDw:APA91bHgNJi0vzN_N0Wo_CedC-DJuR64sNin2zt2u9lKHPTD5lZP-AtO7n0s3yYhIWtsF65M7b3H5_7EsuZZWCs_tHyn0N4u7FugBaq8FuB6jRZimU6CQ8csWKRlJZnwlSy19PbJA8W5'
+	}
+
+	// Configure the request
+	var options = {
+	    url: 'https://fcm.googleapis.com/fcm/send',
+	    method: 'POST',
+	    json : true,
+	    headers: headers,
+	    body: {
+				notification: {
+			    title: "SAMALINNE",
+			    body: "Nuevo mensaje en : " + days + " dia(s)!"
+			  },
+			  "to" : "/topics/samalinne"
+			}
+	}
+
+	// Start the request
+	request(options, function (error, response, body) {
+	    if (!error && response.statusCode == 200) {
+	        // Print out the response body
+	        console.log(body)
+	    }else {
+	    	console.log(error);
+	    	console.log(response);
+	    }
+	})
+}
 
 app.get('/messages', function (req, res) {
 	var messages = getMessages();
