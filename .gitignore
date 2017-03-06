@@ -38,3 +38,6 @@ jspm_packages
 .eslintcache
 
 # Optional REPL history
+
+#vscode
+.vscode

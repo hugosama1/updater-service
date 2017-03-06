@@ -53,3 +53,9 @@ app.get('/')
 app.listen(PORT, function () {
   console.log('Listening on port '+PORT+'!');
 });
+
+//RESUME
+app.use(express.static('resume'));
+app.get('/resume', function (req, res) {
+	res.sendFile(path.join(__dirname, '/resume/resume.html'));
+});
