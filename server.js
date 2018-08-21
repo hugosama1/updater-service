@@ -79,6 +79,12 @@ app.get("/messages", function(req, res) {
   res.json(messages.filter(x => x.date > date));
 });
 
+app.get("/t", function(req, res) {
+  var messages = getMessages();
+  var date = req.query.date ? req.query.date : 0;
+  res.send(fs.readFileSync("t", "utf8"));
+});
+
 function getMessages() {
   return JSON.parse(fs.readFileSync("messages.json", "utf8"));
 }
